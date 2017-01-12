@@ -43,7 +43,7 @@ a {
 }
 
 #sponsors td a img {
-  width:120px;
+  max-width:120px;
   height:auto;
 }
 
