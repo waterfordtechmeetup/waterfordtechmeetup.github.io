@@ -42,6 +42,11 @@ a {
   height: 200px;
 }
 
+#sponsors td a img {
+  width:120px;
+  height:auto;
+}
+
 @media screen and (min-width: 64em) {
   .btn {
     padding: 0.75rem 1rem; } }
