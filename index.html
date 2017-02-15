@@ -81,23 +81,27 @@
             method: 'get',
             url: 'https://api.meetup.com/Waterford-Tech-Meetup/events',
             success: function (result) {
-                $('#next-meetup').show();
-                meetup = result.data[0];
-                console.log(meetup);
-				$('#meetup-rsvp').attr('href', meetup.link);
-
-				var meetupDate = new Date(meetup.time);
-				var date = meetupDate.getDate()  + '/' + (meetupDate.getMonth() + 1);
-                var hours = meetupDate.getHours();
-                var minutes = "0" + meetupDate.getMinutes();
-                var seconds = "0" + meetupDate.getSeconds();
-				var formattedTime = date + " - " + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-				$('#meetup-time').html(formattedTime);
-
-				$('#meetup-description').html(meetup.description);
-				$('#meetup-venue').html(meetup.venue.name);
-				$('#meetup-venue-address').html(meetup.venue.address_1 + ", " + meetup.venue.city);
+                buildMeetupEventSection(result.data[0]);		
             }
         });
 	});
+
+	var buildMeetupEventSection = function(meetup) {
+		$('#next-meetup').show();
+
+		$('#meetup-rsvp').attr('href', meetup.link);
+		$('#meetup-time').html(formattedDateAndTime(meetup.time));
+		$('#meetup-description').html(meetup.description);
+		$('#meetup-venue').html(meetup.venue.name);
+		$('#meetup-venue-address').html(meetup.venue.address_1 + ", " + meetup.venue.city);
+	};
+
+	var formattedDateAndTime = function(time) {
+		var meetupDate = new Date(time);
+		var month = meetupDate.toLocaleString("en-gb", { month: "long" });
+		var date = meetupDate.getDate()  + ' ' + month + " " + meetupDate.getFullYear();
+        var hours = meetupDate.getHours();
+        var minutes = "0" + meetupDate.getMinutes();
+		return date + " - " + hours + ':' + minutes.substr(-2);
+	};
 </script>
