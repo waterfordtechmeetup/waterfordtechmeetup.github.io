@@ -27,21 +27,16 @@
 		<section class="main-content">
 			<h3>Waterford Tech Meetup</h3>
 
-			<h4>Our Next Event</h4>
-			Wednesday, February 22nd, 2017 at 7PM<br>
-			<small>BoxWorks coworking space | <a href="https://www.google.com/maps/place/40+Patrick+St,+Waterford,+Ireland/@52.2600642,-7.1149333,17z/data=!3m1!4b1!4m5!3m4!1s0x4842c69c3b88b417:0x16d5a283fd90114a!8m2!3d52.2600642!4d-7.1127446?hl=en">40 Patrick St, Waterford<a/></small><br>
-			<small><a href="https://www.meetup.com/Waterford-Tech-Meetup/events/237341985/">RSVP at meetup.com</a></small>
+			<section id="next-meetup">
+				<h4>Our Next Event</h4>
+				<span id="meetup-time"></span><br>
+				<small><span id="meetup-venue"></span> | <span id="meetup-venue-address"></small><br>
+				<small><a id="meetup-rsvp" href="">RSVP at meetup.com</a></small>
 
-			<!-- TODO: Meetup Widget -->
-			
-			<p>Ladies and gentlemen, the Waterford Tech Meetup is back! 
-				On Wednesday the 22nd January we are inviting all interested to join us for a talk on 
-				solving service discovery with Node.js microservices, 
-				followed by a talk on Flux architecture with Angular 2.</p>
-			<p>The meetup starts at 7:00pm, with food and drinks provided.</p>
-			<p>Afterwards we are looking forward to discussions and socialising.</p>
-			
-			<hr/>
+				<div id="meetup-description"></div>
+			</section>
+
+			<!--<hr/>-->
 
 			<h3>About</h3>
 
@@ -77,3 +72,36 @@
 		</section>
 	</body>
 </html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+        $.ajax({
+            dataType: 'jsonp',
+            method: 'get',
+            url: 'https://api.meetup.com/Waterford-Tech-Meetup/events',
+            success: function (result) {
+                buildMeetupEventSection(result.data[0]);		
+            }
+        });
+	});
+
+	var buildMeetupEventSection = function(meetup) {
+		$('#next-meetup').show();
+
+		$('#meetup-rsvp').attr('href', meetup.link);
+		$('#meetup-time').html(formattedDateAndTime(meetup.time));
+		$('#meetup-description').html(meetup.description);
+		$('#meetup-venue').html(meetup.venue.name);
+		$('#meetup-venue-address').html(meetup.venue.address_1 + ", " + meetup.venue.city);
+	};
+
+	var formattedDateAndTime = function(time) {
+		var meetupDate = new Date(time);
+		var month = meetupDate.toLocaleString("en-gb", { month: "long" });
+		var date = meetupDate.getDate()  + ' ' + month + " " + meetupDate.getFullYear();
+        var hours = meetupDate.getHours();
+        var minutes = "0" + meetupDate.getMinutes();
+		return date + " - " + hours + ':' + minutes.substr(-2);
+	};
+</script>
