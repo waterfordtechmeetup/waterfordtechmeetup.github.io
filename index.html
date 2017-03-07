@@ -34,9 +34,9 @@
 				<small><a id="meetup-rsvp" href="">RSVP at meetup.com</a></small>
 
 				<div id="meetup-description"></div>
-			</section>
 
-			<!--<hr/>-->
+				<hr/>
+			</section>
 
 			<h3>About</h3>
 
@@ -87,13 +87,16 @@
 	});
 
 	var buildMeetupEventSection = function(meetup) {
-		$('#next-meetup').show();
+		if (meetup === "undefined") {
+			return false;
+		}
 
 		$('#meetup-rsvp').attr('href', meetup.link);
 		$('#meetup-time').html(formattedDateAndTime(meetup.time));
 		$('#meetup-description').html(meetup.description);
 		$('#meetup-venue').html(meetup.venue.name);
 		$('#meetup-venue-address').html(meetup.venue.address_1 + ", " + meetup.venue.city);
+		$('#next-meetup').show();
 	};
 
 	var formattedDateAndTime = function(time) {
